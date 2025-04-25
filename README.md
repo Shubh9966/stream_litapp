@@ -25,37 +25,98 @@ Contains data of 1000 customers, labeled as **credit risk = 1 (risky)** or **0 (
 
 The app uses a **custom rule-based system** + a trained **Gradient Boosting Classifier** model.
 
-### 🎯 Scoring Strategy
+## 🎯 Scoring Strategy – Behind the Risk Flag 🚩
 
-Each customer is scored based on:
+To decide if a customer is **risky (`CreditRisk = 1`)** or **safe (`CreditRisk = 0`)**, a **custom rule-based scoring system** is used — just like how a loan officer manually evaluates applications.
 
-- 💰 **Credit Amount vs Job Median**  
-  High compared to peers → risky 📈  
-  Low → safer 📉
+Each customer is assigned a `risk_score`, starting from **0**. Based on certain conditions, the score is **incremented (+1)** for risky behavior and **decremented (-1)** for safe signs.
 
-- 💼 **Job Type**  
-  Unskilled → risky 🚨  
-  Skilled → neutral  
-  Highly skilled → safer ✅
-
-- 🏦 **Checking & Saving Accounts**  
-  Low or missing → risky  
-  Good savings → safer 💵
-
-- 🏠 **Housing**  
-  Renting → adds risk  
-  Owning → reduces risk
-
-- ⏳ **Loan Duration**  
-  Long-term (>48 months) → risky  
-  Short-term (<12 months) → safer
-
-Based on the combined **risk score**, the model decides:
-
-✅ **Safe Customer** → `CreditRisk = 0`  
-⚠️ **Risky Customer** → `CreditRisk = 1`
+👇 Here's how it works:
 
 ---
+
+### 💰 1. Credit Amount vs. Job Median
+
+**Logic:** Compare the customer's credit amount to the typical (median) credit taken by others with the same job type.
+
+- 📈 If it's **significantly higher** → **+1 risk** (Borrowing above means possible over-leverage)  
+- 📉 If it's **much lower** → **-1 risk** (More conservative borrower)
+
+---
+
+### 💼 2. Job Category
+
+**Logic:** Job type indicates income stability.
+
+- 🧑‍🏭 **Unskilled** → **+1 risk** (Less stable income)  
+- 👷 **Skilled** → No change (Neutral)  
+- 👨‍💼 **Highly Skilled/Managerial** → **-1 risk** (Stable and higher income)
+
+---
+
+### 🏦 3. Checking Account Balance
+
+**Logic:** Shows short-term liquidity.
+
+- 💸 **No account or very low balance** → **+1 risk**  
+- 💵 **High balance** → **-1 risk**  
+- ❓ **Missing data** → Treat as risky → **+1 risk**
+
+---
+
+### 💾 4. Saving Account Status
+
+**Logic:** Indicates long-term financial planning.
+
+- 🚫 **No savings / little** → **+1 risk**  
+- 🟡 **Moderate savings** → No effect  
+- 🟢 **Good / Rich savings** → **-1 risk**
+
+---
+
+### ⏳ 5. Duration of Loan
+
+**Logic:** Longer repayment period = higher chance of default.
+
+- 📆 **> 48 months** → **+1 risk**  
+- 📉 **< 12 months** → **-1 risk**
+
+---
+
+### 🏠 6. Housing Status
+
+**Logic:** Asset ownership adds to financial reliability.
+
+- 🏘️ **Renting** → **+1 risk** (More monthly obligations)  
+- 🏡 **Own house** → **-1 risk** (Asset ownership = financial stability)  
+- 🆓 **Free housing** → Neutral
+
+---
+
+## 🚨 Final Risk Flag Logic
+
+After calculating the total `risk_score`:
+
+- If **risk_score > 1** → Flagged as **Risky (`CreditRisk = 1`)** 🚩  
+- Else → Considered **Safe (`CreditRisk = 0`)** ✅
+
+---
+
+### 🧠 Example:
+
+| Feature              | Value              | Risk Impact |
+|----------------------|--------------------|-------------|
+| Credit Amount        | High for job type  | +1          |
+| Job                  | Unskilled          | +1          |
+| Checking Account     | None               | +1          |
+| Saving Account       | Moderate           | 0           |
+| Duration             | 60 months          | +1          |
+| Housing              | Own                | -1          |
+| **Total Risk Score** |                    | **+3**       |
+
+**➡️ Result:** Risky Customer (`CreditRisk = 1`) 🚩
+
+
 
 ## 🔍 Model Insights
 
