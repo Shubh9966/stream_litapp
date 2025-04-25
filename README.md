@@ -1,6 +1,4 @@
-Bilkul bhai! Yah raha ek aur stylish, thoda zyada descriptive aur emoji touch ke saath `README.md` — direct daal sakta hai:
 
----
 
 # 💳 Credit Risk Prediction App
 
@@ -115,6 +113,3 @@ streamlit run app.py
 - Dataset by **UCI Machine Learning Repository**
 - Inspired by **real-world credit risk scoring systems**
 
----
-
-Let me know if you want to add badges, screenshots, or anything more!
