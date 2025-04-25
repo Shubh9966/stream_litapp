@@ -35,8 +35,8 @@ job            = st.selectbox('Job (0–3)', [0, 1, 2, 3])
 housing        = st.selectbox('Housing', le_housing.classes_.tolist())
 saving_account = st.selectbox('Saving accounts', le_saving.classes_.tolist())
 checking_acc   = st.selectbox('Checking account', list(checking_mapping.keys()))
-credit_amount  = st.number_input('Credit Amount', min_value=1, step=1)
-duration       = st.number_input('Duration (months)', min_value=1, step=1)
+credit_amount  = st.number_input('Credit Amount', min_value=100, step=1)
+duration       = st.number_input('Duration (months)', min_value=3, step=1)
 purpose        = st.selectbox('Purpose', le_purpose.classes_.tolist())
 
 # ── Prediction ────────────────────────────────────────────────────────────────
