@@ -67,7 +67,7 @@ if st.button('Submit'):
         conf = rf_model.predict_proba(X).max() * 100
 
         # Display
-        label = "✅ safe Credit Risk" if pred == 0 else "⚠️ Bad Credit Risk"
+        label = "✅ Good Credit Risk" if pred == 0 else "⚠️ Bad Credit Risk"
         st.success(f"Prediction: {label}")
         st.info(f"Model confidence: {conf:.2f}%")
 
